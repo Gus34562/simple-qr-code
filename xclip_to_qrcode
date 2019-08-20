@@ -1,0 +1,18 @@
+#!/bin/sh
+value=$(xclip -o)
+qrencode -s 100 -m 5 -o /tmp/qrcode.png "$value"
+image_dimension=$(file /tmp/qrcode.png | awk -F ", " '{print $2}' | awk -F " x " '{print $1}')
+window_dimension="500"
+zoom_value=$((window_dimension*100000))
+zoom_value=$((zoom_value/image_dimension))
+zoom_value_int=$((zoom_value/1000))
+zoom_value_float=$(((zoom_value - (zoom_value_int*1000))))
+zoom_value="$zoom_value_int"".""$zoom_value_float"
+feh --geometry "$window_dimension""x""$window_dimension" --zoom "$zoom_value" /tmp/qrcode.png &
+while [ "$id" = "" ]
+do
+	id=$(xdotool search --name qrcode.png)
+	sleep 0.01
+done
+i3-msg "[id=$id] floating enable"
+
