@@ -1,5 +1,5 @@
 #!/bin/sh]
-#requires: feh, qrencode, xdotool, i3, file
+#requires: xclip, feh, qrencode, xdotool, i3, file
 value=$(xclip -o)
 qrencode -s 100 -m 5 -o /tmp/qrcode.png "$value"
 image_dimension=$(file /tmp/qrcode.png | awk -F ", " '{print $2}' | awk -F " x " '{print $1}')
